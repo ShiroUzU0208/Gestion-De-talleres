@@ -48,3 +48,4 @@ Para hacer copias de seguridad, copia ese archivo .db a un lugar seguro.
 - El campo de Conformidad se bloquea permanentemente al guardar. No hay forma de modificarlo después.
 - Las contraseñas de cuentas de clientes se guardan en texto plano en la base de datos local.
 - Solo funciona en Windows con Node.js instalado.
+- Proyecto Con ayuda de Claude
