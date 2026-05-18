@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TallerPro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<div id="app">
+
+  <aside id="sidebar">
+    <div class="logo">
+      <span class="logo-icon">⚙</span>
+      <div>
+        <div class="logo-title" id="app-nombre">TallerPro</div>
+        <div class="logo-sub">Gestión de Reparaciones</div>
+      </div>
+    </div>
+    <nav>
+      <button class="nav-btn active" data-view="dashboard" onclick="showView('dashboard')"><span class="nav-icon">◈</span> Dashboard</button>
+      <button class="nav-btn" data-view="clientes" onclick="showView('clientes')"><span class="nav-icon">◉</span> Clientes</button>
+      <button class="nav-btn" data-view="trabajos" onclick="showView('trabajos')"><span class="nav-icon">◐</span> Nuevo Trabajo</button>
+      <button class="nav-btn" data-view="ajustes" onclick="showView('ajustes')"><span class="nav-icon">◧</span> Ajustes</button>
+    </nav>
+    <div class="sidebar-footer"><div class="version">v2.0.0</div></div>
+  </aside>
+
+  <main id="main">
+
+    <!-- DASHBOARD -->
+    <section id="view-dashboard" class="view active">
+      <div class="view-header">
+        <div><h1 id="dash-title">Dashboard</h1><p class="view-sub">Resumen de tu taller</p></div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card accent">
+          <div class="stat-icon">👤</div>
+          <div class="stat-num" id="stat-clientes">—</div>
+          <div class="stat-label">Clientes totales</div>
+          <div class="stat-sub" id="stat-clientes-sub"></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🔧</div>
+          <div class="stat-num" id="stat-trabajos">—</div>
+          <div class="stat-label">Trabajos totales</div>
+          <div class="stat-sub" id="stat-trabajos-sub"></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-num" id="stat-cobrado">—</div>
+          <div class="stat-label">Total cobrado</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📅</div>
+          <div class="stat-num" id="stat-hoy">—</div>
+          <div class="stat-label">Trabajos hoy</div>
+        </div>
+      </div>
+
+      <!-- Clientes por periodo -->
+      <div class="periodo-grid">
+        <div class="periodo-card">
+          <div class="periodo-label">Clientes hoy</div>
+          <div class="periodo-num" id="pct-hoy">—</div>
+          <div class="periodo-pct" id="pct-hoy-txt"></div>
+        </div>
+        <div class="periodo-card">
+          <div class="periodo-label">Clientes este mes</div>
+          <div class="periodo-num" id="pct-mes">—</div>
+          <div class="periodo-pct" id="pct-mes-txt"></div>
+        </div>
+        <div class="periodo-card">
+          <div class="periodo-label">Clientes este año</div>
+          <div class="periodo-num" id="pct-anio">—</div>
+          <div class="periodo-pct" id="pct-anio-txt"></div>
+        </div>
+      </div>
+
+      <div class="dash-actions">
+        <button class="btn-primary" onclick="showView('trabajos')">+ Registrar nuevo trabajo</button>
+      </div>
+    </section>
+
+    <!-- CLIENTES -->
+    <section id="view-clientes" class="view">
+      <div class="view-header">
+        <div><h1>Clientes</h1><p class="view-sub">Historial completo por cliente</p></div>
+        <div class="header-actions">
+          <input type="text" id="search-input" placeholder="Buscar nombre, cédula, teléfono..." oninput="buscarClientes(this.value)"/>
+        </div>
+      </div>
+      <div id="clientes-list" class="clientes-grid"></div>
+    </section>
+
+    <!-- NUEVO TRABAJO -->
+    <section id="view-trabajos" class="view">
+      <div class="view-header">
+        <h1 id="form-title">Registrar Trabajo</h1>
+        <p class="view-sub">Completa todos los campos del servicio</p>
+      </div>
+      <div class="form-container">
+        <form id="trabajo-form" onsubmit="guardarTrabajo(event)">
+
+          <!-- 01 CLIENTE -->
+          <div class="form-block">
+            <div class="block-title"><span class="block-num">01</span> Datos del Cliente</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Buscar cliente existente</label>
+                <div class="search-cliente-wrap">
+                  <input type="text" id="cliente-search" placeholder="Nombre, cédula o teléfono..." oninput="buscarClienteForm(this.value)"/>
+                  <div id="cliente-suggestions" class="suggestions-dropdown hidden"></div>
+                </div>
+              </div>
+              <div class="form-group center-btn">
+                <label>&nbsp;</label>
+                <button type="button" class="btn-secondary small" onclick="limpiarCliente()">Nuevo cliente</button>
+              </div>
+            </div>
+            <input type="hidden" id="cliente-id"/>
+            <div class="form-row four">
+              <div class="form-group">
+                <label>Nombre completo *</label>
+                <input type="text" id="cliente-nombre" placeholder="Juan García" required/>
+              </div>
+              <div class="form-group">
+                <label>Cédula (11 dígitos)</label>
+                <input type="text" id="cliente-cedula" placeholder="00000000000" maxlength="11" oninput="this.value=this.value.replace(/\D/g,'')"/>
+              </div>
+              <div class="form-group">
+                <label>Teléfono</label>
+                <input type="tel" id="cliente-telefono" placeholder="+1 809 000 0000"/>
+              </div>
+              <div class="form-group">
+                <label>Correo electrónico</label>
+                <input type="email" id="cliente-email" placeholder="juan@email.com"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- 02 TRABAJO -->
+          <div class="form-block">
+            <div class="block-title"><span class="block-num">02</span> Detalles del Trabajo</div>
+            <div class="form-row three">
+              <div class="form-group">
+                <label>Dispositivo *</label>
+                <select id="trabajo-dispositivo" required onchange="toggleOtroDispositivo(this.value)">
+                  <option value="">Seleccionar...</option>
+                  <option value="Teléfono móvil">📱 Teléfono móvil</option>
+                  <option value="Memoria USB">💾 Memoria USB</option>
+                  <option value="Tablet">📟 Tablet</option>
+                  <option value="Otro">🔧 Otro</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Fecha de ingreso *</label>
+                <input type="date" id="trabajo-fecha-ingreso" required/>
+              </div>
+              <div class="form-group">
+                <label>Fecha de entrega</label>
+                <input type="date" id="trabajo-fecha-entrega"/>
+              </div>
+            </div>
+            <div class="form-group" id="otro-dispositivo-wrap" style="display:none;margin-bottom:14px;">
+              <label>Especifique el dispositivo *</label>
+              <input type="text" id="dispositivo-otro" placeholder="Ej: Laptop, Smartwatch..."/>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Descripción del problema</label>
+                <textarea id="trabajo-descripcion" rows="3" placeholder="¿Qué le pasa al dispositivo?"></textarea>
+              </div>
+              <div class="form-group">
+                <label>Solución aplicada</label>
+                <textarea id="trabajo-solucion" rows="3" placeholder="¿Qué se hizo?"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- 03 CREDENCIALES -->
+          <div class="form-block">
+            <div class="block-title">
+              <span class="block-num">03</span> Credenciales de Cuentas
+              <label class="toggle-wrap">
+                <input type="checkbox" id="usa-credenciales" onchange="toggleCredenciales(this.checked)"/>
+                <span class="toggle"></span>
+                <span class="toggle-label">Se usaron credenciales</span>
+              </label>
+            </div>
+            <div id="credenciales-fields" class="hidden">
+              <div class="form-row three">
+                <div class="form-group">
+                  <label>Tipo de cuenta</label>
+                  <select id="tipo-cuenta">
+                    <option value="">Seleccionar...</option>
+                    <option value="Google">Google</option>
+                    <option value="Samsung Account">Samsung Account</option>
+                    <option value="iCloud / Apple ID">iCloud / Apple ID</option>
+                    <option value="Otro">Otro</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Usuario / Email</label>
+                  <input type="text" id="usuario-cuenta" placeholder="usuario@gmail.com"/>
+                </div>
+                <div class="form-group">
+                  <label>Contraseña</label>
+                  <div class="password-wrap">
+                    <input type="password" id="password-cuenta" placeholder="••••••••"/>
+                    <button type="button" class="eye-btn" onclick="togglePass()">👁</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 04 COBRO -->
+          <div class="form-block">
+            <div class="block-title"><span class="block-num">04</span> Cobro del Servicio</div>
+            <div class="form-row three">
+              <div class="form-group">
+                <label>Monto cobrado *</label>
+                <div class="money-wrap">
+                  <span class="money-sign">$</span>
+                  <input type="number" id="trabajo-monto" placeholder="0.00" step="0.01" min="0" required/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Método de pago</label>
+                <select id="metodo-pago" onchange="togglePorcentaje(this.value)">
+                  <option value="Efectivo">💵 Efectivo</option>
+                  <option value="Transferencia">🏦 Transferencia</option>
+                </select>
+              </div>
+              <div class="form-group" id="pct-wrap" style="display:none;">
+                <label>% Transferencia: <span id="pct-valor">0</span>%</label>
+                <input type="range" id="porcentaje-transferencia" min="0" max="100" step="1" value="0"
+                  oninput="document.getElementById('pct-valor').textContent=this.value" class="slider"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- 05 CONFORMIDAD -->
+          <div class="form-block conformidad-block">
+            <div class="block-title">
+              <span class="block-num">05</span> Conformidad del Cliente
+              <span class="lock-badge" id="lock-badge" style="display:none">🔒 BLOQUEADO</span>
+            </div>
+            <div class="conformidad-info">⚠️ Una vez activado y guardado, este campo <strong>no podrá modificarse</strong>.</div>
+            <div class="conformidad-slider-wrap">
+              <label class="toggle-wrap grande">
+                <input type="checkbox" id="trabajo-conformidad"/>
+                <span class="toggle grande"></span>
+                <span class="toggle-label grande" id="conf-label">Cliente NO conforme</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" onclick="cancelarForm()">Cancelar</button>
+            <button type="submit" class="btn-primary">💾 Guardar Trabajo</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- AJUSTES -->
+    <section id="view-ajustes" class="view">
+      <div class="view-header">
+        <h1>Ajustes</h1>
+        <p class="view-sub">Configuración de la aplicación</p>
+      </div>
+      <div class="form-block" style="max-width:480px;">
+        <div class="block-title"><span class="block-num">✦</span> Nombre de la aplicación</div>
+        <div class="form-group">
+          <label>Nombre que aparece en el sidebar</label>
+          <input type="text" id="input-app-nombre" placeholder="TallerPro" maxlength="30"/>
+        </div>
+        <div style="margin-top:14px;">
+          <button class="btn-primary" onclick="guardarNombreApp()">Guardar nombre</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- MODAL HISTORIAL -->
+<div id="modal-overlay" class="modal-overlay hidden" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <h2 id="modal-cliente-nombre">—</h2>
+        <p id="modal-cliente-info">—</p>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-actions">
+        <button class="btn-danger small" onclick="eliminarClienteActual()">🗑 Eliminar cliente</button>
+      </div>
+      <div id="historial-trabajos"></div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+<script src="app.js"></script>
+</body>
+</html>

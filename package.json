@@ -1,0 +1,35 @@
+{
+  "name": "gestion-taller",
+  "version": "2.0.0",
+  "description": "Gestión de clientes para taller de reparación",
+  "author": "Carlos",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win --x64"
+  },
+  "build": {
+    "appId": "com.taller.gestion",
+    "productName": "TallerPro",
+    "directories": { "output": "dist" },
+    "win": {
+      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "files": ["**/*", "!node_modules/.cache", "!dist"],
+    "asarUnpack": ["node_modules/sql.js/**"]
+  },
+  "dependencies": {
+    "sql.js": "^1.10.3"
+  },
+  "devDependencies": {
+    "electron": "^29.0.0",
+    "electron-builder": "^24.13.3"
+  }
+}
