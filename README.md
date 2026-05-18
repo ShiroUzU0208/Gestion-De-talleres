@@ -1,51 +1,37 @@
-Gestión de Reparaciones
+# ⚙️ TallerPro - Sistema de Gestión para Talleres de Soporte Técnico
 
-App de escritorio para gestionar clientes y trabajos de tu taller de telefonía y memorias USB.
+TallerPro es una aplicación de escritorio moderna, rápida y minimalista diseñada específicamente para técnicos de hardware, especialistas en micro-soldadura e informáticos que necesitan gestionar clientes, órdenes de trabajo, finanzas e historiales de reparación sin complicaciones.
 
----
+Desarrollada sobre **Electron** utilizando un motor de base de datos relacional **SQLite (`sql.js`)** que trabaja completamente local y en segundo plano.
 
-## Instalación (solo la primera vez)
+## 🚀 Características Clave
 
-##Instalar Node.js
-Ve a https://nodejs.org y descarga la versión LTS (el botón verde grande).
-Instálalo normalmente: siguiente → siguiente → finalizar.
+- **Dashboard Automatizado:** Control de estadísticas en tiempo real (Ingresos del mes, trabajos diarios, flujo de clientes).
+- **Gestión Blindada de Clientes:** Registro detallado con números de contacto y bases de datos históricas por usuario.
+- **Órdenes de Trabajo Avanzadas:** Control del dispositivo, descripción de la falla, soluciones aplicadas y almacenamiento seguro de credenciales/cuentas asociadas al equipo.
+- **Módulo de Finanzas Integrado:** Soporte para pagos en efectivo o transferencias con cálculo automático de comisiones bancarias.
+- **Arquitectura Local Silenciosa:** La base de datos guarda la información de manera asíncrona para liberar el hilo principal de la interfaz, asegurando transiciones fluidas a 60 FPS.
 
-##Instalar la app
-Haz doble clic en el archivo instalar.bat
-Espera a que termine (puede tardar 1-2 minutos).
+## 🛠️ Stack Tecnológico
 
-##Iniciar
-Abre una terminal en esta carpeta y escribe:
-  npm start
+- **Frontend:** HTML5, CSS3 (Variables nativas, diseño responsivo adaptado a taller), JavaScript (ES6+).
+- **Backend / Runtime:** Node.js & Electron.
+- **Base de Datos:** SQLite via `sql.js` (Estructura relacional empaquetada e indexada).
+- **Compilador:** Electron-Builder (Configurado para empaquetado NSIS optimizado para Windows x64).
 
----
+## 📦 Instalación en Desarrollo
 
-## Estructura del proyecto
+Si deseas clonar el proyecto y ejecutarlo en tu entorno local, asegúrate de tener [Node.js](https://nodejs.org/) instalado y corre:
 
-gestion-taller/
-├── main.js          ← proceso principal + base de datos
-├── preload.js       ← puente seguro entre interfaz y datos
-├── package.json     ← configuración del proyecto
-├── instalar.bat     ← instalador para Windows
-└── src/
-    ├── index.html   ← interfaz principal
-    ├── styles.css   ← estilos
-    └── app.js       ← lógica de la interfaz
+```bash
+# 1. Clonar el repositorio
+git clone [https://github.com/ShiroUzU0208/Gestion-De-talleres.git](https://github.com/ShiroUzU0208/Gestion-De-talleres.git)
 
----
+# 2. Entrar a la carpeta del proyecto
+cd Gestion-De-talleres
 
-## Dónde se guardan los datos
+# 3. Instalar las dependencias de producción y desarrollo
+npm install
 
-Los datos se guardan automáticamente en:
-  C:\Users\TuUsuario\AppData\Roaming\gestion-taller\taller.db
-
-Para hacer copias de seguridad, copia ese archivo .db a un lugar seguro.
-
----
-
-## Notas importantes
-
-- El campo de Conformidad se bloquea permanentemente al guardar. No hay forma de modificarlo después.
-- Las contraseñas de cuentas de clientes se guardan en texto plano en la base de datos local.
-- Solo funciona en Windows con Node.js instalado.
-- Proyecto Con ayuda de Claude
+# 4. Lanzar la aplicación en modo desarrollo
+npm start
